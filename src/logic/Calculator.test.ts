@@ -1,5 +1,9 @@
-import sum from "./Calculator";
+import getNumber from "./Calculator";
 
-test("adds 1 + 2 to equal 3", () => {
-  expect(sum(1, 2)).toBe(3);
+test("getNumber 1 works", () => {
+  expect(getNumber(1111, 4).number).toBe(0.2343);
+});
+
+test("getNumber 2 works", () => {
+  expect(getNumber(getNumber(1111, 4).seed, 4).number).toBe(0.4896);
 });
