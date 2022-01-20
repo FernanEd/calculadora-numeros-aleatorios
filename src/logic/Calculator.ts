@@ -1,4 +1,4 @@
-const getRandomNumber = (seed: number, d: number) => {
+const getNumber = (seed: number, d: number) => {
   let squared = String(seed ** 2);
   let offset = 2;
   let nextNumberString = squared.substr(
@@ -12,4 +12,4 @@ const getRandomNumber = (seed: number, d: number) => {
   };
 };
 
-export default getRandomNumber;
+export default getNumber;

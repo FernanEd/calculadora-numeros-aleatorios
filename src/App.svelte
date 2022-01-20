@@ -1,29 +1,71 @@
 <script lang="ts">
-  import logo from './assets/svelte.png'
-  import Counter from './lib/Counter.svelte'
+  import getNumber from "./logic/Calculator";
+
+  let seed: number | undefined;
+  let n: number = 5;
+  let error = "";
+
+  let numbers: { seed: number; number: number }[] = [];
+
+  const generateNumbers = () => {
+    if (!seed) return;
+
+    let newNumbers = [getNumber(seed, 4)];
+    let prev = newNumbers[0];
+
+    for (let i = 1; i < n; i++) {
+      let current = getNumber(prev.seed, 4);
+      newNumbers.push(current);
+      prev = current;
+    }
+
+    numbers = newNumbers;
+  };
+
+  const copyToClipboard = (value: string) =>
+    navigator.clipboard.writeText(value);
 </script>
 
+<svelte:head>
+  <title>Calculadora</title>
+</svelte:head>
+
 <main>
-  <img src={logo} alt="Svelte Logo" />
-  <h1>Hello Typescript!</h1>
+  <h1>Pseudo-Random number generation</h1>
+  <form on:submit|preventDefault={generateNumbers}>
+    <label>
+      Starting seed
+      <input type="number" bind:value={seed} required />
+    </label>
 
-  <Counter />
+    <label>
+      Numbers to generate
+      <input type="number" bind:value={n} min="1" max="100" required />
+    </label>
 
-  <p>
-    Visit <a href="https://svelte.dev">svelte.dev</a> to learn how to build Svelte
-    apps.
-  </p>
+    <button>Generate</button>
+  </form>
 
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme">SvelteKit</a> for
-    the officially supported framework, also powered by Vite!
-  </p>
+  <h3>Numbers</h3>
+
+  <section>
+    {#each numbers as { number }, i (i)}
+      <article on:click={() => copyToClipboard(String(number))}>
+        {number}
+      </article>
+    {/each}
+  </section>
 </main>
 
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   :root {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    background-color: #e8e8ff;
   }
 
   main {
@@ -32,34 +74,36 @@
     margin: 0 auto;
   }
 
-  img {
-    height: 16rem;
-    width: 16rem;
+  label {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4rem;
-    font-weight: 100;
-    line-height: 1.1;
-    margin: 2rem auto;
-    max-width: 14rem;
+  form {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 2rem;
+    margin-bottom: 4rem;
   }
 
-  p {
-    max-width: 14rem;
-    margin: 1rem auto;
-    line-height: 1.35;
+  section {
+    display: inline-grid;
+    grid-template-columns: repeat(8, 1fr);
+    max-width: 800px;
+    margin: auto;
+    gap: 0.25rem;
   }
 
-  @media (min-width: 480px) {
-    h1 {
-      max-width: none;
-    }
+  article {
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    cursor: copy;
+  }
 
-    p {
-      max-width: none;
-    }
+  article:hover {
+    outline: 2px solid blue;
   }
 </style>
