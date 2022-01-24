@@ -13,3 +13,17 @@ test("getNumber 3 works", () => {
     0.9708
   );
 });
+
+test("getNumber works D=5 1", () => {
+  expect(getNumber(47291, 5).number).toBe(0.36438);
+});
+
+test("getNumber works D=5 2", () => {
+  expect(getNumber(getNumber(47291, 5).seed, 5).number).toBe(0.27727);
+});
+
+test("getNumber works D=5 3", () => {
+  expect(getNumber(getNumber(getNumber(47291, 5).seed, 5).seed, 5).number).toBe(
+    0.87865
+  );
+});
