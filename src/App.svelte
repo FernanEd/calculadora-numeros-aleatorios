@@ -3,6 +3,7 @@
 
   let seed: number | undefined;
   let n: number = 5;
+  let digits: number = 4;
   let error = "";
 
   let numbers: { seed: number; number: number }[] = [];
@@ -10,11 +11,11 @@
   const generateNumbers = () => {
     if (!seed) return;
 
-    let newNumbers = [getNumber(seed, 4)];
+    let newNumbers = [getNumber(seed, digits)];
     let prev = newNumbers[0];
 
     for (let i = 1; i < n; i++) {
-      let current = getNumber(prev.seed, 4);
+      let current = getNumber(prev.seed, digits);
       newNumbers.push(current);
       prev = current;
     }
@@ -36,6 +37,11 @@
     <label>
       Starting seed
       <input type="number" bind:value={seed} required />
+    </label>
+
+    <label>
+      Digits
+      <input type="number" bind:value={digits} min="1" max="100" required />
     </label>
 
     <label>
